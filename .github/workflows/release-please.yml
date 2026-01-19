@@ -6,6 +6,9 @@ on:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write # Required for NPM provenance
     steps:
       - uses: googleapis/release-please-action@c3fc4de07084f75a2b61a5b933069bda6edf3d5c # v4
         id: release
@@ -21,7 +24,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
         if: ${{ steps.release.outputs.release_created }}
-      - run: npm publish
+      - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ steps.release.outputs.release_created }}
