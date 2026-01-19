@@ -1,10 +1,14 @@
 // Type definitions for Actual Budget API
 export type { Account, Transaction, Category, CategoryGroup, Payee } from './core/types/domain.js';
 import { z } from 'zod';
-import { ToolSchema } from '@modelcontextprotocol/sdk/types.js';
 
-const _ToolInputSchema = ToolSchema.shape.inputSchema;
-export type ToolInput = z.infer<typeof _ToolInputSchema>;
+// Type for MCP tool input schema (JSON Schema format)
+export type ToolInput = {
+  type: 'object';
+  properties?: Record<string, unknown>;
+  required?: string[];
+  [key: string]: unknown;
+};
 
 export interface BudgetFile {
   id?: string;
