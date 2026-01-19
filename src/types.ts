@@ -12,6 +12,29 @@ export interface BudgetFile {
   name: string;
 }
 
+export interface BudgetMonth {
+  month: string;
+  incomeAvailable: number;
+  lastMonthOverspent: number;
+  forNextMonth: number;
+  totalBudgeted: number;
+  toBudget: number;
+  fromLastMonth: number;
+  totalIncome: number;
+  totalSpent: number;
+  totalBalance: number;
+  categoryGroups: Record<string, unknown>[];
+}
+
+export const GetBudgetMonthArgsSchema = z.object({
+  month: z
+    .string()
+    .regex(/^\d{4}-\d{2}$/, 'month must be in YYYY-MM format')
+    .describe('The budget month in YYYY-MM format (e.g., "2024-01")'),
+});
+
+export type GetBudgetMonthArgs = z.infer<typeof GetBudgetMonthArgsSchema>;
+
 // Type definitions for tool arguments
 export const GetTransactionsArgsSchema = z.object({
   accountId: z.string(),

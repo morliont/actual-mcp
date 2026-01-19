@@ -8,9 +8,9 @@ tags:
   - deploy
   - docker
 arguments: []
-source_url: ""
+source_url: ''
 author: Thijs Morlion
-author_url: ""
+author_url: ''
 shells: []
 ---
 name: Check Upstream Updates
@@ -21,9 +21,9 @@ tags:
   - sync
   - check
 arguments: []
-source_url: ""
+source_url: ''
 author: Thijs Morlion
-author_url: ""
+author_url: ''
 shells: []
 ---
 name: Docker Build & Push
@@ -34,9 +34,9 @@ tags:
   - docker
   - deploy
 arguments: []
-source_url: ""
+source_url: ''
 author: Thijs Morlion
-author_url: ""
+author_url: ''
 shells: []
 ---
 name: Run Tests
@@ -47,9 +47,9 @@ tags:
   - test
   - quality
 arguments: []
-source_url: ""
+source_url: ''
 author: Thijs Morlion
-author_url: ""
+author_url: ''
 shells: []
 ---
 name: Resolve Conflicts
@@ -60,7 +60,7 @@ tags:
   - sync
   - conflicts
 arguments: []
-source_url: ""
+source_url: ''
 author: Thijs Morlion
-author_url: ""
+author_url: ''
 shells: []

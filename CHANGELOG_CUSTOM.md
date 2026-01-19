@@ -2,6 +2,19 @@
 
 This file tracks custom modifications made to the fork that differ from the upstream `s-stefanov/actual-mcp` repository.
 
+## [Custom] - 2026-01-19
+
+### Added
+- **Budget Tools** (v1.8.0)
+  - Created `get-budget-months` tool to retrieve all available budget months
+  - Created `get-budget-month` tool to get detailed budget data for a specific month
+    - Includes budgeted vs spent amounts for all categories organized by category groups
+    - Displays summary totals and individual category breakdowns
+  - Added API wrappers: `getBudgetMonths()` and `getBudgetMonth()` in `src/actual-api.ts`
+  - Added `BudgetMonth` type and `GetBudgetMonthArgs` schema in `src/types.ts`
+  - Comprehensive unit tests with 100% coverage for both tools
+  - Updated README.md with new tools documentation and example queries
+
 ## [Custom] - 2026-01-18
 
 ### Added

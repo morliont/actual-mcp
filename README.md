@@ -29,6 +29,11 @@ The Actual Budget MCP Server allows you to interact with your personal financial
 - **`spending-by-category`** - Generate spending breakdowns categorized by type
 - **`monthly-summary`** - Get monthly income, expenses, and savings metrics
 
+#### Budgets
+
+- **`get-budget-months`** - Retrieve a list of all available budget months
+- **`get-budget-month`** - Get detailed budget information for a specific month, including budgeted vs spent amounts for all categories
+
 #### Categories
 
 - **`get-grouped-categories`** - Retrieve a list of all category groups with their categories
@@ -240,6 +245,8 @@ Once connected, you can ask Claude questions like:
 - "Show me my spending by category last month"
 - "How much did I spend on groceries in January?"
 - "What's my savings rate over the past 3 months?"
+- "Show me my budget for this month"
+- "How much have I budgeted vs spent in each category for January 2024?"
 - "Analyze my budget and suggest areas to improve"
 
 ## Usage with Codex CLI

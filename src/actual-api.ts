@@ -134,6 +134,34 @@ export async function getRules(): Promise<RuleEntity[]> {
   return api.getRules();
 }
 
+/**
+ * Get all budget months (ensures API is initialized)
+ */
+export async function getBudgetMonths(): Promise<string[]> {
+  await initActualApi();
+  return api.getBudgetMonths();
+}
+
+/**
+ * Get budget data for a specific month (ensures API is initialized)
+ */
+export async function getBudgetMonth(month: string): Promise<{
+  month: string;
+  incomeAvailable: number;
+  lastMonthOverspent: number;
+  forNextMonth: number;
+  totalBudgeted: number;
+  toBudget: number;
+  fromLastMonth: number;
+  totalIncome: number;
+  totalSpent: number;
+  totalBalance: number;
+  categoryGroups: Record<string, unknown>[];
+}> {
+  await initActualApi();
+  return api.getBudgetMonth(month);
+}
+
 // ----------------------------
 // ACTION
 // ----------------------------

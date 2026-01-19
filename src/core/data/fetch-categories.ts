@@ -1,6 +1,6 @@
 import { getCategories, getCategoryGroups } from '../../actual-api.js';
 import type { Category, CategoryGroup } from '../types/domain.js';
-import type { APICategoryEntity, APICategoryGroupEntity } from '@actual-app/api/@types/loot-core/src/server/api-models.js';
+import type { APICategoryEntity } from '@actual-app/api/@types/loot-core/src/server/api-models.js';
 
 export async function fetchAllCategories(): Promise<Category[]> {
   const results = await getCategories();
