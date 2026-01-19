@@ -16,7 +16,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash, timingSafeEqual } from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { initActualApi, shutdownActualApi } from './actual-api.js';
 import { fetchAllAccounts } from './core/data/fetch-accounts.js';
@@ -101,7 +101,9 @@ const bearerAuth = (req: Request, res: Response, next: NextFunction): void => {
     return;
   }
 
-  if (token !== expectedToken) {
+  const actual = createHash('sha256').update(token).digest();
+  const expected = createHash('sha256').update(expectedToken).digest();
+  if (!timingSafeEqual(actual, expected)) {
     res.status(401).json({
       error: 'Invalid bearer token',
     });
