@@ -356,8 +356,13 @@ async function main(): Promise<void> {
     });
   } else {
     const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.error('Actual Budget MCP Server (stdio) started');
+    try {
+      await server.connect(transport);
+      console.error('Actual Budget MCP Server (stdio) started');
+    } catch (error) {
+      console.error(`Failed to connect stdio transport: ${toErrorMessage(error)}`);
+      process.exit(1);
+    }
   }
 }
 

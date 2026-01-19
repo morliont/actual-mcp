@@ -27,18 +27,39 @@ npm run test:ui
 Integration tests that start the actual server and test real HTTP requests.
 
 ```bash
-# Run E2E tests
+# Run server E2E tests
 npm run test:e2e
 
-# Run all tests (unit + E2E)
+# Run tool E2E tests (tests all 26 MCP tools)
+npm run test:e2e:tools
+
+# Run all tests (unit + E2E + tool E2E)
 npm run test:all
 ```
 
-**What it tests**:
+**Server E2E tests**:
 - Server starts without crashing
 - HTTP endpoints respond correctly
 - MCP protocol initialization
 - No unhandled promise rejections
+
+**Tool E2E tests** (comprehensive coverage of all 26 MCP tools):
+- Tool discovery and listing
+- All read-only tools (10 tools):
+  - get-accounts, get-transactions, monthly-summary
+  - balance-history, spending-by-category
+  - get-grouped-categories, get-payees, get-rules
+  - get-budget-months, get-budget-month
+- All write tools (16 tools):
+  - Transaction operations (create, update, delete)
+  - Category operations (create, update, delete, groups)
+  - Payee operations (create, update, delete)
+  - Rule operations (create, update, delete)
+  - Bank sync operations
+- Parameter validation
+- Error handling (invalid tools, malformed args)
+- Concurrent request handling
+- Server stability under load
 
 ### 3. Docker E2E Tests
 Full container tests that validate the Docker image before deployment.
@@ -66,7 +87,8 @@ Every PR triggers:
 - ✅ Unit tests with coverage
 - ✅ Type checking
 - ✅ Linting and formatting
-- ✅ E2E tests
+- ✅ Server E2E tests
+- ✅ Tool E2E tests (all 26 MCP tools)
 - ✅ Docker container tests
 
 ### Pre-Release Testing
@@ -87,9 +109,10 @@ npm run quality
 ```
 actual-budget-mcp/
 ├── src/
-│   ├── **/*.test.ts          # Unit tests (co-located with source)
-│   └── index.test.ts          # E2E integration tests
-└── test-docker.sh             # Docker E2E test script
+│   ├── **/*.test.ts               # Unit tests (co-located with source)
+│   ├── index.test.ts              # Server E2E tests
+│   └── tools/tools.e2e.test.ts    # Tool E2E tests (all 26 tools)
+└── test-docker.sh                 # Docker E2E test script
 ```
 
 ## Writing Tests
