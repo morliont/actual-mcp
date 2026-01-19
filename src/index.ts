@@ -305,7 +305,19 @@ async function main(): Promise<void> {
           return;
         }
 
-        await streamableTransport.handleRequest(req, res, req.body);
+        await streamableTransport.handleRequest(req, res, req.body).catch((error) => {
+          console.error(`StreamableTransport.handleRequest error for ${requestLabel}: ${toErrorMessage(error)}`);
+          if (!res.headersSent) {
+            res.status(500).json({
+              jsonrpc: '2.0',
+              error: {
+                code: -32603,
+                message: 'Internal server error',
+              },
+              id: null,
+            });
+          }
+        });
       } catch (error) {
         console.error(`Streamable HTTP handler error for ${requestLabel}: ${toErrorMessage(error)}`);
 
@@ -324,7 +336,12 @@ async function main(): Promise<void> {
 
     app.post('/messages', bearerAuth, async (req: Request, res: Response) => {
       if (transport) {
-        await transport.handlePostMessage(req, res, req.body);
+        await transport.handlePostMessage(req, res, req.body).catch((error) => {
+          console.error(`handlePostMessage error: ${toErrorMessage(error)}`);
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to handle message' });
+          }
+        });
       } else {
         res.status(500).json({ error: 'Transport not initialized' });
       }
@@ -351,6 +368,13 @@ setupPrompts(server);
 server.setRequestHandler(SetLevelRequestSchema, (request) => {
   console.log(`--- Logging level: ${request.params.level}`);
   return {};
+});
+
+// Global unhandled rejection handler
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Promise Rejection:', reason);
+  console.error('Promise:', promise);
+  // Don't exit process - just log it
 });
 
 process.on('SIGINT', () => {
