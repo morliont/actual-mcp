@@ -17,7 +17,7 @@ export async function handler(
   args: Record<string, unknown>
 ): Promise<ReturnType<typeof successWithJson> | ReturnType<typeof errorFromCatch>> {
   try {
-    const { id }: RuleEntity = await createRule(args);
+    const { id }: RuleEntity = await createRule(args as Omit<RuleEntity, 'id'>);
 
     return successWithJson('Successfully created rule ' + id);
   } catch (err) {

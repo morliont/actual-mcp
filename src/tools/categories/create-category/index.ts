@@ -32,9 +32,9 @@ export async function handler(
       return errorFromCatch('name is required and must be a string');
     }
 
-    const data: Record<string, unknown> = {
-      name: args.name,
-      group_id: args.groupId,
+    const data = {
+      name: args.name as string,
+      group_id: args.groupId as string,
     };
 
     const id: string = await createCategory(data);

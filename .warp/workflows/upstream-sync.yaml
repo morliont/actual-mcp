@@ -1,0 +1,66 @@
+---
+name: Complete Sync & Deploy
+command: |-
+  echo "Starting complete upstream sync and deployment workflow..."
+description: Check for upstream updates, merge, test, and deploy Docker image
+tags:
+  - sync
+  - deploy
+  - docker
+arguments: []
+source_url: ""
+author: Thijs Morlion
+author_url: ""
+shells: []
+---
+name: Check Upstream Updates
+command: |-
+  echo "Checking for upstream updates..."
+description: Check what's new in upstream without merging
+tags:
+  - sync
+  - check
+arguments: []
+source_url: ""
+author: Thijs Morlion
+author_url: ""
+shells: []
+---
+name: Docker Build & Push
+command: |-
+  echo "Building and pushing Docker image..."
+description: Rebuild and push multi-platform Docker image to Docker Hub
+tags:
+  - docker
+  - deploy
+arguments: []
+source_url: ""
+author: Thijs Morlion
+author_url: ""
+shells: []
+---
+name: Run Tests
+command: |-
+  echo "Running complete test suite..."
+description: Run quality checks, tests, and build
+tags:
+  - test
+  - quality
+arguments: []
+source_url: ""
+author: Thijs Morlion
+author_url: ""
+shells: []
+---
+name: Resolve Conflicts
+command: |-
+  echo "Analyzing merge conflicts..."
+description: Help resolve merge conflicts from upstream sync
+tags:
+  - sync
+  - conflicts
+arguments: []
+source_url: ""
+author: Thijs Morlion
+author_url: ""
+shells: []

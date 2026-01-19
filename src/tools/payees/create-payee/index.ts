@@ -32,9 +32,9 @@ export async function handler(
       return errorFromCatch('name is required and must be a string');
     }
 
-    const data: Record<string, unknown> = { name: args.name };
+    const data: { name: string; transfer_acct?: string } = { name: args.name as string };
     if (args.transferAccount) {
-      data.transfer_acct = args.transferAccount;
+      data.transfer_acct = args.transferAccount as string;
     }
 
     const id: string = await createPayee(data);
