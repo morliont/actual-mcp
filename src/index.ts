@@ -16,6 +16,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
 import { randomUUID } from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { initActualApi, shutdownActualApi } from './actual-api.js';
@@ -177,6 +178,7 @@ async function main(): Promise<void> {
 
   if (useSse) {
     const app = express();
+    app.use(helmet());
     app.use(express.json());
     let transport: SSEServerTransport | null = null;
 
