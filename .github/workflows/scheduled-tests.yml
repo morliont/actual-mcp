@@ -65,19 +65,19 @@ jobs:
           echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Results:**" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ steps.tests.outcome }}" = "success" ]; then
             echo "- ✅ Tests passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "- ❌ Tests failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ "${{ steps.typecheck.outcome }}" = "success" ]; then
             echo "- ✅ Type check passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "- ❌ Type check failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ "${{ steps.lint.outcome }}" = "success" ]; then
             echo "- ✅ Linting passed" >> $GITHUB_STEP_SUMMARY
           else
@@ -91,23 +91,23 @@ jobs:
           script: |
             const title = '🚨 Scheduled Test Failure - ' + new Date().toISOString().split('T')[0];
             const body = `## Scheduled Test Failure
-            
+
             The scheduled tests failed on ${new Date().toUTCString()}.
-            
+
             **Run Details:**
             - Workflow Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
             - Commit: ${context.sha}
-            
+
             **Results:**
             - Tests: ${{ steps.tests.outcome }}
             - Type Check: ${{ steps.typecheck.outcome }}
             - Linting: ${{ steps.lint.outcome }}
-            
+
             Please investigate the test failures and ensure the codebase is healthy.
-            
+
             ---
             *This issue was automatically created by the scheduled tests workflow.*`;
-            
+
             // Check if there's already an open issue for today
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
@@ -116,10 +116,10 @@ jobs:
               labels: 'scheduled-tests',
               per_page: 10
             });
-            
+
             const today = new Date().toISOString().split('T')[0];
             const existingIssue = issues.data.find(issue => issue.title.includes(today));
-            
+
             if (!existingIssue) {
               await github.rest.issues.create({
                 owner: context.repo.owner,
