@@ -7,6 +7,13 @@ import { handler, schema } from './index.js';
 import * as actualApi from '../../actual-api.js';
 import { CreateTransactionArgs } from '../../types.js';
 
+// Helper to safely get text content
+const getTextContent = (result: Awaited<ReturnType<typeof handler>>): string => {
+  const content = result.content[0];
+  if ('text' in content) return content.text;
+  throw new Error('Expected text content');
+};
+
 // Mock the actual-api module
 vi.mock('../../actual-api.js', () => ({
   createTransaction: vi.fn(),
@@ -59,8 +66,9 @@ describe('create-transaction tool', () => {
         amount: 12030,
       });
       expect(result.isError).toBeUndefined();
-      expect(result.content[0].text).toContain('Successfully created transaction');
-      expect(result.content[0].text).toContain(mockTransactionId);
+      const text = getTextContent(result);
+      expect(text).toContain('Successfully created transaction');
+      expect(text).toContain(mockTransactionId);
     });
 
     it('should create a transaction with all optional fields', async () => {
@@ -130,7 +138,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('account');
+      expect(getTextContent(result)).toContain('account');
     });
 
     it('should return error when account is not a string', async () => {
@@ -143,7 +151,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('string');
+      expect(getTextContent(result)).toContain('string');
     });
 
     it('should return error when date is missing', async () => {
@@ -155,7 +163,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('date');
+      expect(getTextContent(result)).toContain('date');
     });
 
     it('should return error when date format is invalid', async () => {
@@ -168,7 +176,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('date must be in YYYY-MM-DD format');
+      expect(getTextContent(result)).toContain('date must be in YYYY-MM-DD format');
     });
 
     it('should return error when amount is missing', async () => {
@@ -180,7 +188,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('amount');
+      expect(getTextContent(result)).toContain('amount');
     });
 
     it('should return error when amount is not a number', async () => {
@@ -193,7 +201,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('number');
+      expect(getTextContent(result)).toContain('number');
     });
 
     it('should return error when category is not a string', async () => {
@@ -207,7 +215,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('string');
+      expect(getTextContent(result)).toContain('string');
     });
 
     it('should return error when subtransactions is not an array', async () => {
@@ -221,7 +229,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('array');
+      expect(getTextContent(result)).toContain('array');
     });
 
     it('should return error when subtransaction is missing amount', async () => {
@@ -235,7 +243,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('amount');
+      expect(getTextContent(result)).toContain('amount');
     });
   });
 
@@ -314,7 +322,7 @@ describe('create-transaction tool', () => {
       const result = await handler(args);
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toContain('API connection failed');
+      expect(getTextContent(result)).toContain('API connection failed');
     });
   });
 });

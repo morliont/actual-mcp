@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handler } from './index.js';
 import * as actualApi from '../../../actual-api.js';
 
+// Helper to safely get text content
+const getTextContent = (result: Awaited<ReturnType<typeof handler>>): string => {
+  const content = result.content[0];
+  if ('text' in content) return content.text;
+  throw new Error('Expected text content');
+};
+
 vi.mock('../../../actual-api.js', () => ({
   getBudgetMonths: vi.fn(),
 }));
@@ -51,7 +58,7 @@ describe('get-budget-months tool', () => {
     if (result.isError) {
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('text');
-      expect(result.content[0].text).toContain('API connection failed');
+      expect(getTextContent(result)).toContain('API connection failed');
     }
   });
 });

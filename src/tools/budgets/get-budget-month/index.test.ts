@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handler } from './index.js';
 import * as actualApi from '../../../actual-api.js';
+
+// Helper to safely get text content
+const getTextContent = (result: Awaited<ReturnType<typeof handler>>): string => {
+  const content = result.content[0];
+  if ('text' in content) return content.text;
+  throw new Error('Expected text content');
+};
 import * as fetchCategories from '../../../core/data/fetch-categories.js';
 
 vi.mock('../../../actual-api.js', () => ({
@@ -98,7 +105,7 @@ describe('get-budget-month tool', () => {
     if (result.isError) {
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('text');
-      expect(result.content[0].text).toContain('Budget data not found');
+      expect(getTextContent(result)).toContain('Budget data not found');
     }
   });
 
@@ -124,7 +131,6 @@ describe('get-budget-month tool', () => {
     const result = await handler({ month: '2024-01' });
 
     expect(result.isError).toBeUndefined();
-    expect(result.content).toHaveLength(1);
     expect(result.content[0].type).toBe('text');
     if (result.content[0].type === 'text') {
       expect(result.content[0].text).toContain('Budget for 2024-01');
