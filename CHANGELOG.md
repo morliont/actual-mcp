@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.10.0](https://github.com/morliont/actual-mcp/compare/v1.9.3...v1.10.0) (2026-01-20)
+
+
+### Features
+
+* Add trunk-based development workflow with automated pre-commit checks and releases ([b70cc8f](https://github.com/morliont/actual-mcp/commit/b70cc8f4c7bba40d37b0c3c4437be1f1c33856ff))
+
+
+### Bug Fixes
+
+* Create separate vitest config for E2E tests ([4c4b886](https://github.com/morliont/actual-mcp/commit/4c4b886cb0062ea74a087330ae223511a5ceaab3))
+* Skip husky install in production Docker builds ([2b670ff](https://github.com/morliont/actual-mcp/commit/2b670ff9c081980cd2e8cdb57b578604341ebd2b))
+* Skip tool E2E tests in pre-push hook (require database) ([39df7f7](https://github.com/morliont/actual-mcp/commit/39df7f7108782543abbccd54cb289891696f3bc6))
+
 ## [1.7.0](https://github.com/s-stefanov/actual-mcp/compare/v1.6.0...v1.7.0) (2026-01-17)
 
 
