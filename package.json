@@ -38,7 +38,7 @@
     "docker:test": "./test-docker.sh",
     "sync:upstream": "./sync-upstream.sh",
     "prepublishOnly": "npm run build",
-    "prepare": "husky"
+    "prepare": "node -e \"try{require('husky')}catch(_){process.exit(0)}require('child_process').execSync('npx husky')\""
   },
   "dependencies": {
     "@actual-app/api": "26.1.0",
