@@ -37,7 +37,8 @@
     "docker:push": "./docker-push.sh",
     "docker:test": "./test-docker.sh",
     "sync:upstream": "./sync-upstream.sh",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@actual-app/api": "26.1.0",
@@ -57,7 +58,9 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "16.5.0",
+    "husky": "^9.1.7",
     "jiti": "2.6.1",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",

@@ -170,10 +170,10 @@ describe('MCP Tools E2E Tests', () => {
   describe('Tool Discovery', () => {
     it('should list all available tools', async () => {
       const response = await listTools();
-      
+
       expect(response.result).toBeDefined();
       expect(response.error).toBeUndefined();
-      
+
       const result = response.result as { tools: Array<{ name: string; description: string }> };
       expect(result.tools).toBeDefined();
       expect(Array.isArray(result.tools)).toBe(true);
@@ -193,14 +193,14 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-accounts', () => {
       it('should retrieve account list without errors', async () => {
         const response = await callTool('get-accounts');
-        
+
         expect(response.error).toBeUndefined();
         expect(response.result).toBeDefined();
       });
 
       it('should handle empty arguments', async () => {
         const response = await callTool('get-accounts', {});
-        
+
         expect(response.error).toBeUndefined();
       });
     });
@@ -208,7 +208,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-transactions', () => {
       it('should handle missing required accountId', async () => {
         const response = await callTool('get-transactions', {});
-        
+
         // Should return error for missing required field
         expect(response.error || response.result).toBeDefined();
       });
@@ -218,7 +218,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('get-transactions', {
           accountId: 'test-account-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -229,7 +229,7 @@ describe('MCP Tools E2E Tests', () => {
           startDate: '2024-01-01',
           endDate: '2024-12-31',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -240,7 +240,7 @@ describe('MCP Tools E2E Tests', () => {
           minAmount: 10.0,
           maxAmount: 100.0,
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -251,7 +251,7 @@ describe('MCP Tools E2E Tests', () => {
           categoryName: 'Groceries',
           payeeName: 'Store',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -260,7 +260,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('monthly-summary', () => {
       it('should handle empty arguments (current month)', async () => {
         const response = await callTool('monthly-summary', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -269,7 +269,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('monthly-summary', {
           month: '2024-01',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -278,7 +278,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('balance-history', () => {
       it('should require accountId parameter', async () => {
         const response = await callTool('balance-history', {});
-        
+
         expect(response).toBeDefined();
       });
 
@@ -286,7 +286,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('balance-history', {
           accountId: 'test-account-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -297,7 +297,7 @@ describe('MCP Tools E2E Tests', () => {
           startDate: '2024-01-01',
           endDate: '2024-12-31',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -306,7 +306,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('spending-by-category', () => {
       it('should handle empty arguments (current month)', async () => {
         const response = await callTool('spending-by-category', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -315,7 +315,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('spending-by-category', {
           month: '2024-01',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -324,7 +324,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-grouped-categories', () => {
       it('should retrieve categories without errors', async () => {
         const response = await callTool('get-grouped-categories', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -333,7 +333,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-payees', () => {
       it('should retrieve payees without errors', async () => {
         const response = await callTool('get-payees', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -342,7 +342,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-rules', () => {
       it('should retrieve rules without errors', async () => {
         const response = await callTool('get-rules', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -351,7 +351,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-budget-months', () => {
       it('should retrieve budget months without errors', async () => {
         const response = await callTool('get-budget-months', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -360,7 +360,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('get-budget-month', () => {
       it('should require month parameter', async () => {
         const response = await callTool('get-budget-month', {});
-        
+
         expect(response).toBeDefined();
       });
 
@@ -368,7 +368,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('get-budget-month', {
           month: '2024-01',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -382,7 +382,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('create-transaction', () => {
       it('should validate required parameters', async () => {
         const response = await callTool('create-transaction', {});
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -391,11 +391,11 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('create-transaction', {
           account: 'test-account-id',
           date: '2024-01-15',
-          amount: 50.00,
+          amount: 50.0,
           payee: 'Test Payee',
           notes: 'Test transaction',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -404,16 +404,16 @@ describe('MCP Tools E2E Tests', () => {
     describe('update-transaction', () => {
       it('should require id parameter', async () => {
         const response = await callTool('update-transaction', {});
-        
+
         expect(response).toBeDefined();
       });
 
       it('should accept transaction update', async () => {
         const response = await callTool('update-transaction', {
           id: 'test-transaction-id',
-          amount: 75.00,
+          amount: 75.0,
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -422,7 +422,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('delete-transaction', () => {
       it('should require id parameter', async () => {
         const response = await callTool('delete-transaction', {});
-        
+
         expect(response).toBeDefined();
       });
 
@@ -430,7 +430,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('delete-transaction', {
           id: 'test-transaction-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -442,7 +442,7 @@ describe('MCP Tools E2E Tests', () => {
           name: 'Test Category',
           group_id: 'test-group-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -452,7 +452,7 @@ describe('MCP Tools E2E Tests', () => {
           id: 'test-category-id',
           name: 'Updated Category',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -461,7 +461,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('delete-category', {
           id: 'test-category-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -472,7 +472,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('create-payee', {
           name: 'Test Payee',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -482,7 +482,7 @@ describe('MCP Tools E2E Tests', () => {
           id: 'test-payee-id',
           name: 'Updated Payee',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -491,7 +491,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('delete-payee', {
           id: 'test-payee-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -505,7 +505,7 @@ describe('MCP Tools E2E Tests', () => {
           conditions: [],
           actions: [],
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -515,7 +515,7 @@ describe('MCP Tools E2E Tests', () => {
           id: 'test-rule-id',
           stage: 'post',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -524,7 +524,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('delete-rule', {
           id: 'test-rule-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -533,7 +533,7 @@ describe('MCP Tools E2E Tests', () => {
     describe('run-bank-sync', () => {
       it('should require accountId parameter', async () => {
         const response = await callTool('run-bank-sync', {});
-        
+
         expect(response).toBeDefined();
       });
 
@@ -541,7 +541,7 @@ describe('MCP Tools E2E Tests', () => {
         const response = await callTool('run-bank-sync', {
           accountId: 'test-account-id',
         });
-        
+
         expect(response).toBeDefined();
         expect(serverProcess?.killed).toBe(false);
       });
@@ -551,7 +551,7 @@ describe('MCP Tools E2E Tests', () => {
   describe('Error Handling', () => {
     it('should handle invalid tool name gracefully', async () => {
       const response = await callTool('non-existent-tool', {});
-      
+
       expect(response).toBeDefined();
       expect(serverProcess?.killed).toBe(false);
     });
@@ -560,7 +560,7 @@ describe('MCP Tools E2E Tests', () => {
       const response = await callTool('get-transactions', {
         accountId: null,
       });
-      
+
       expect(response).toBeDefined();
       expect(serverProcess?.killed).toBe(false);
     });
@@ -572,9 +572,9 @@ describe('MCP Tools E2E Tests', () => {
         callTool('get-grouped-categories'),
         callTool('get-rules'),
       ];
-      
+
       const responses = await Promise.allSettled(promises);
-      
+
       expect(responses.length).toBe(4);
       expect(serverProcess?.killed).toBe(false);
     });
@@ -586,27 +586,27 @@ describe('MCP Tools E2E Tests', () => {
       for (let i = 0; i < 10; i++) {
         await callTool('get-accounts');
       }
-      
+
       expect(serverProcess?.killed).toBe(false);
     });
 
     it('should not have unhandled rejections in logs', async () => {
       let hasUnhandledRejection = false;
-      
+
       serverProcess?.stderr?.on('data', (data) => {
         const output = data.toString();
         if (output.includes('UnhandledPromiseRejection')) {
           hasUnhandledRejection = true;
         }
       });
-      
+
       // Make several tool calls
       await callTool('get-accounts');
       await callTool('get-payees');
-      
+
       // Wait for potential async errors
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       expect(hasUnhandledRejection).toBe(false);
     });
   });

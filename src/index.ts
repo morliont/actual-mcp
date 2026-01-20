@@ -209,18 +209,21 @@ async function main(): Promise<void> {
 
     const handleLegacySse = (req: Request, res: Response): void => {
       transport = new SSEServerTransport('/messages', res);
-      server.connect(transport).then(() => {
-        console.log = (message: string) => server.sendLoggingMessage({ level: 'info', data: message });
+      server
+        .connect(transport)
+        .then(() => {
+          console.log = (message: string) => server.sendLoggingMessage({ level: 'info', data: message });
 
-        console.error = (message: string) => server.sendLoggingMessage({ level: 'error', data: message });
+          console.error = (message: string) => server.sendLoggingMessage({ level: 'error', data: message });
 
-        console.error(`Actual Budget MCP Server (SSE) started on port ${resolvedPort}`);
-      }).catch((error) => {
-        console.error(`Failed to connect SSE transport: ${toErrorMessage(error)}`);
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Failed to initialize SSE transport' });
-        }
-      });
+          console.error(`Actual Budget MCP Server (SSE) started on port ${resolvedPort}`);
+        })
+        .catch((error) => {
+          console.error(`Failed to connect SSE transport: ${toErrorMessage(error)}`);
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to initialize SSE transport' });
+          }
+        });
     };
 
     app.get('/sse', bearerAuth, handleLegacySse);

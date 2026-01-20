@@ -263,6 +263,34 @@ Point Codex at the same port you pass to `npm start -- --sse --port <PORT>`.
 
 ## Development
 
+This project uses **trunk-based development** with automated pre-commit checks and releases.
+
+For detailed workflow documentation, see [WORKFLOW.md](./WORKFLOW.md).
+
+### Quick Start
+
+1. **Install dependencies** (sets up git hooks automatically):
+```bash
+npm install
+```
+
+2. **Make your changes** and commit (pre-commit checks run automatically):
+```bash
+git add .
+git commit -m "feat: Your feature description"
+```
+
+3. **Push to main** (E2E tests run automatically):
+```bash
+git push
+```
+
+4. **Create a release** (automated via version tag):
+```bash
+npm version patch  # or minor, or major
+git push --follow-tags
+```
+
 For development with auto-rebuild:
 
 ```bash

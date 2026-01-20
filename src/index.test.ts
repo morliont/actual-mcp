@@ -13,17 +13,13 @@ describe('MCP Server E2E Tests', () => {
 
   beforeAll(async () => {
     // Start the server in SSE mode
-    serverProcess = spawn(
-      'node',
-      [join(__dirname, '../build/index.js'), '--sse', '--port', String(TEST_PORT)],
-      {
-        env: {
-          ...process.env,
-          NODE_ENV: 'test',
-          // Use test environment without requiring actual Actual Budget server
-        },
-      }
-    );
+    serverProcess = spawn('node', [join(__dirname, '../build/index.js'), '--sse', '--port', String(TEST_PORT)], {
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+        // Use test environment without requiring actual Actual Budget server
+      },
+    });
 
     // Wait for server to start
     await new Promise<void>((resolve, reject) => {
@@ -102,10 +98,10 @@ describe('MCP Server E2E Tests', () => {
 
       // Should get a response (not crash)
       expect(response).toBeTruthy();
-      
+
       // Check that server is still alive
       expect(serverProcess?.killed).toBe(false);
-    } catch (error) {
+    } catch (_error) {
       // Even if request fails, server should not crash
       expect(serverProcess?.killed).toBe(false);
     }
@@ -114,9 +110,10 @@ describe('MCP Server E2E Tests', () => {
   it('should not have unhandled promise rejections', async () => {
     let unhandledRejection = false;
 
-    serverProcess?.on('exit', (code, signal) => {
+    serverProcess?.on('exit', (code, _signal) => {
       // If server crashes, it's a problem
-      if (code !== null && code !== 0 && code !== 143) { // 143 = SIGTERM (expected on cleanup)
+      if (code !== null && code !== 0 && code !== 143) {
+        // 143 = SIGTERM (expected on cleanup)
         unhandledRejection = true;
       }
     });

@@ -1,0 +1,187 @@
+name: Automated Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0 # Fetch all history for changelog generation
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Get previous tag
+        id: get_previous_tag
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -A1 ${GITHUB_REF#refs/tags/} | tail -1)
+          if [ -z "$PREVIOUS_TAG" ]; then
+            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: generate_notes
+        run: |
+          TAG="${{ steps.get_version.outputs.tag }}"
+          VERSION="${{ steps.get_version.outputs.version }}"
+          PREV_TAG="${{ steps.get_previous_tag.outputs.previous_tag }}"
+
+          # Get commit messages since last tag
+          COMMITS=$(git log $PREV_TAG..$TAG --pretty=format:"- %s" --no-merges)
+
+          # Count commits by type
+          FEATURES=$(echo "$COMMITS" | grep -i "^- feat\|^- add\|^- new" | wc -l | tr -d ' ')
+          FIXES=$(echo "$COMMITS" | grep -i "^- fix\|^- bug" | wc -l | tr -d ' ')
+          DOCS=$(echo "$COMMITS" | grep -i "^- doc" | wc -l | tr -d ' ')
+          TESTS=$(echo "$COMMITS" | grep -i "^- test" | wc -l | tr -d ' ')
+
+          # Categorize commits
+          FEATURE_COMMITS=$(echo "$COMMITS" | grep -i "^- feat\|^- add\|^- new" || echo "")
+          FIX_COMMITS=$(echo "$COMMITS" | grep -i "^- fix\|^- bug" || echo "")
+          DOC_COMMITS=$(echo "$COMMITS" | grep -i "^- doc" || echo "")
+          TEST_COMMITS=$(echo "$COMMITS" | grep -i "^- test" || echo "")
+          OTHER_COMMITS=$(echo "$COMMITS" | grep -iv "^- feat\|^- add\|^- new\|^- fix\|^- bug\|^- doc\|^- test" || echo "")
+
+          # Build release notes
+          cat > release_notes.md << EOF
+          ## Release $VERSION
+
+          ### 📊 Summary
+          - **Features**: $FEATURES
+          - **Bug Fixes**: $FIXES
+          - **Documentation**: $DOCS
+          - **Tests**: $TESTS
+
+          EOF
+
+          if [ -n "$FEATURE_COMMITS" ]; then
+            echo "### ✨ New Features" >> release_notes.md
+            echo "$FEATURE_COMMITS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$FIX_COMMITS" ]; then
+            echo "### 🐛 Bug Fixes" >> release_notes.md
+            echo "$FIX_COMMITS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$TEST_COMMITS" ]; then
+            echo "### 🧪 Testing" >> release_notes.md
+            echo "$TEST_COMMITS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$DOC_COMMITS" ]; then
+            echo "### 📚 Documentation" >> release_notes.md
+            echo "$DOC_COMMITS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          if [ -n "$OTHER_COMMITS" ]; then
+            echo "### 🔧 Other Changes" >> release_notes.md
+            echo "$OTHER_COMMITS" >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+
+          cat >> release_notes.md << EOF
+          ### 🐳 Docker Images
+          - \`tmorlion/actual-mcp:$VERSION\`
+          - \`tmorlion/actual-mcp:latest\`
+
+          **Platforms**: linux/amd64, linux/arm64
+
+          ### 📦 Installation
+
+          **Docker:**
+          \`\`\`bash
+          docker pull tmorlion/actual-mcp:$VERSION
+          \`\`\`
+
+          **NPM:**
+          \`\`\`bash
+          npm install -g actual-mcp@$VERSION
+          \`\`\`
+
+          ### 📝 Full Changelog
+          https://github.com/\${{ github.repository }}/compare/$PREV_TAG...$TAG
+
+          ---
+          Co-Authored-By: Warp <agent@warp.dev>
+          EOF
+
+          cat release_notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.2.0
+        with:
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+
+  build-docker:
+    name: Build and Push Docker Images
+    needs: create-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29a4f095f2a0f8b69c0b5e56b0b7044c2d364d31 # v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@b41efa1d9ff5a21b9c4913f82e66a4e05e47ac50 # v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract version from tag
+        id: extract_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            tmorlion/actual-mcp:${{ steps.extract_version.outputs.version }}
+            tmorlion/actual-mcp:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@e96b6bc8fae3189dfa2772416e2bc8b0f00533fb # v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: tmorlion/actual-mcp
+          short-description: 'Actual Budget MCP Server - Connect AI assistants to Actual Budget'
+        continue-on-error: true
