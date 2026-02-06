@@ -89,6 +89,7 @@ sync-full() {
   echo "  5. Push to GitHub"
   echo "  6. Run e2e tests"
   echo "  7. Build and push Docker image to Docker Hub"
+  echo "  8. Create GitHub release"
   echo ""
   echo -n "Continue? (y/n) "
   read -r REPLY
@@ -133,6 +134,17 @@ sync-full() {
   if ! npm run docker:push; then
     echo "❌ Docker push failed."
     return 1
+  fi
+  echo "✅ Docker images pushed"
+
+  # Step 8: Create GitHub release
+  echo ""
+  echo "🏷️  Step 8: Creating GitHub release..."
+  # Push tags to GitHub (triggers automatic release via GitHub Actions)
+  if git push --tags 2>&1 | grep -q "Everything up-to-date"; then
+    echo "ℹ️  All tags already pushed, GitHub release should exist"
+  else
+    echo "✅ Tags pushed, GitHub release will be created automatically"
   fi
 
   echo ""
