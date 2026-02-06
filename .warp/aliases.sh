@@ -88,8 +88,8 @@ sync-full() {
   echo "  4. Run all quality checks and tests"
   echo "  5. Build and push Docker image to Docker Hub"
   echo ""
-  read -p "Continue? (y/n) " -n 1 -r
-  echo
+  echo -n "Continue? (y/n) "
+  read -r REPLY
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     npm run sync:upstream
   else
@@ -149,8 +149,8 @@ version-bump() {
   echo "  2) Minor (1.7.0 → 1.8.0)"
   echo "  3) Major (1.7.0 → 2.0.0)"
   echo ""
-  read -p "Enter choice (1-3): " -n 1 -r
-  echo
+  echo -n "Enter choice (1-3): "
+  read -r REPLY
   
   case $REPLY in
     1) npm version patch ;;
@@ -163,8 +163,8 @@ version-bump() {
   echo ""
   echo "✅ Bumped to v$NEW"
   echo ""
-  read -p "Build and push Docker image? (y/n) " -n 1 -r
-  echo
+  echo -n "Build and push Docker image? (y/n) "
+  read -r REPLY
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     npm run docker:push
   fi
