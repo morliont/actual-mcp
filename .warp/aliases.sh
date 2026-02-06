@@ -88,8 +88,7 @@ sync-full() {
   echo "  4. Run all quality checks and unit tests"
   echo "  5. Push to GitHub"
   echo "  6. Run e2e tests"
-  echo "  7. Build and push Docker image to Docker Hub"
-  echo "  8. Create GitHub release"
+  echo "  7. Create GitHub release (triggers automated Docker build via GitHub Actions)"
   echo ""
   echo -n "Continue? (y/n) "
   read -r REPLY
@@ -128,23 +127,18 @@ sync-full() {
   fi
   echo "✅ All e2e tests passed"
 
-  # Step 7: Build and push Docker
+  # Step 7: Create GitHub release
   echo ""
-  echo "🐳 Step 7: Building and pushing Docker image..."
-  if ! npm run docker:push; then
-    echo "❌ Docker push failed."
-    return 1
-  fi
-  echo "✅ Docker images pushed"
-
-  # Step 8: Create GitHub release
-  echo ""
-  echo "🏷️  Step 8: Creating GitHub release..."
-  # Push tags to GitHub (triggers automatic release via GitHub Actions)
+  echo "🏷️  Step 7: Creating GitHub release..."
+  # Push tags to GitHub (triggers automatic release + Docker build via GitHub Actions)
   if git push --tags 2>&1 | grep -q "Everything up-to-date"; then
     echo "ℹ️  All tags already pushed, GitHub release should exist"
   else
-    echo "✅ Tags pushed, GitHub release will be created automatically"
+    echo "✅ Tags pushed to GitHub"
+    echo "📦 GitHub Actions will automatically:"
+    echo "   - Create the release with changelog"
+    echo "   - Build and push Docker images (linux/amd64, linux/arm64)"
+    echo "   - Update Docker Hub description"
   fi
 
   echo ""
