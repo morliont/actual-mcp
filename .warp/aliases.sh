@@ -85,16 +85,58 @@ sync-full() {
   echo "  1. Check for updates from upstream (s-stefanov/actual-mcp)"
   echo "  2. Show what's changed and identify potential conflicts"
   echo "  3. Merge/sync the changes with custom modifications"
-  echo "  4. Run all quality checks and tests"
-  echo "  5. Build and push Docker image to Docker Hub"
+  echo "  4. Run all quality checks and unit tests"
+  echo "  5. Push to GitHub"
+  echo "  6. Run e2e tests"
+  echo "  7. Build and push Docker image to Docker Hub"
   echo ""
   echo -n "Continue? (y/n) "
   read -r REPLY
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    npm run sync:upstream
-  else
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Cancelled."
+    return 0
   fi
+
+  # Step 1-4: Sync upstream (includes quality checks and unit tests)
+  echo ""
+  echo "📥 Step 1-4: Syncing from upstream..."
+  if ! npm run sync:upstream; then
+    echo "❌ Upstream sync failed or has conflicts. Resolve conflicts and re-run."
+    return 1
+  fi
+
+  # Step 5: Push to GitHub
+  echo ""
+  echo "📤 Step 5: Pushing to GitHub..."
+  if ! git push; then
+    echo "❌ Failed to push to GitHub."
+    return 1
+  fi
+  echo "✅ Pushed to GitHub"
+
+  # Step 6: Run e2e tests
+  echo ""
+  echo "🧪 Step 6: Running e2e tests..."
+  if ! npm run test:e2e; then
+    echo "❌ E2E tests failed."
+    return 1
+  fi
+  if ! npm run test:e2e:tools; then
+    echo "❌ E2E tools tests failed."
+    return 1
+  fi
+  echo "✅ All e2e tests passed"
+
+  # Step 7: Build and push Docker
+  echo ""
+  echo "🐳 Step 7: Building and pushing Docker image..."
+  if ! npm run docker:push; then
+    echo "❌ Docker push failed."
+    return 1
+  fi
+
+  echo ""
+  echo "🎉 Full sync and deployment complete!"
 }
 
 # Docker push
