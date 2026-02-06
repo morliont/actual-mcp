@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 
 describe('MCP Server E2E Tests', () => {
   let serverProcess: ChildProcess | null = null;
-  const TEST_PORT = 3001;
+  const TEST_PORT = 13001;
 
   beforeAll(async () => {
     // Start the server in SSE mode
