@@ -41,12 +41,13 @@
     "prepare": "node -e \"try{require('husky')}catch(_){process.exit(0)}require('child_process').execSync('npx husky')\""
   },
   "dependencies": {
-    "@actual-app/api": "26.1.0",
+    "@actual-app/api": "^26.2.0",
     "@modelcontextprotocol/sdk": "^1.25.2",
     "dotenv": "17.2.3",
     "express": "5.2.1",
     "helmet": "^8.1.0",
-    "zod": "3.25.76"
+    "zod": "3.25.76",
+    "zod-to-json-schema": "3.25.1"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
