@@ -28,7 +28,7 @@ Your custom Warp workflows are installed at: `~/.warp/workflows/`
 | **sync-full** | Complete sync + test + deploy | ⚠️ Asks before changes |
 | **docker-push** | Build & push Docker image | ⚠️ Asks before pushing |
 | **test-all** | Run all tests | ✅ Safe (testing only) |
-| **version-bump** | Bump version & deploy | ⚠️ Asks before changes |
+| **version-bump** | Bump version & push to GitHub | ⚠️ Pushes to GitHub |
 
 ## 🚀 Recommended Workflow
 
@@ -122,12 +122,16 @@ Your custom Warp workflows are installed at: `~/.warp/workflows/`
 ---
 
 ### version-bump
-**What:** Increment version and deploy
+**What:** Increment version and trigger automated release
 **Steps:**
 1. Shows current version
 2. Asks: patch / minor / major
-3. Updates package.json
-4. Asks if you want to deploy Docker
+3. Updates package.json and creates git tag
+4. Pushes commit and tag to GitHub
+5. GitHub Actions automatically:
+   - Creates release with changelog
+   - Builds multi-platform Docker images
+   - Pushes to Docker Hub
 
 **Use:** When releasing a new version
 

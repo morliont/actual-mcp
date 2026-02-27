@@ -8,7 +8,7 @@ sync-check      # Check for upstream updates (safe)
 sync-full       # Complete sync + test + deploy
 docker-push     # Build & push multi-platform Docker
 test-all        # Run complete test suite
-version-bump    # Bump version and deploy
+version-bump    # Bump version and trigger GitHub Actions
 ```
 
 **✅ These commands work anywhere in your terminal!**

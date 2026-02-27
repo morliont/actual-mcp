@@ -211,11 +211,30 @@ version-bump() {
   echo ""
   echo "✅ Bumped to v$NEW"
   echo ""
-  echo -n "Build and push Docker image? (y/n) "
-  read -r REPLY
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    npm run docker:push
+  echo "📤 Pushing to GitHub..."
+  
+  # Push commits
+  if ! git push; then
+    echo "❌ Failed to push commits to GitHub."
+    return 1
   fi
+  
+  # Push tag to trigger GitHub Actions
+  if ! git push origin "v$NEW"; then
+    echo "❌ Failed to push tag to GitHub."
+    return 1
+  fi
+  
+  echo "✅ Pushed v$NEW to GitHub"
+  echo ""
+  echo "🚀 GitHub Actions will now automatically:"
+  echo "   - Create a GitHub release with changelog"
+  echo "   - Build multi-platform Docker images (linux/amd64, linux/arm64)"
+  echo "   - Push to Docker Hub: tmorlion/actual-mcp:$NEW and :latest"
+  echo "   - Update Docker Hub description"
+  echo ""
+  echo "📊 Monitor the workflow at:"
+  echo "   https://github.com/$(git remote get-url origin | sed -e 's/.*github.com[:/]\(.*\)\.git/\1/')/actions"
 }
 
 echo "✅ Actual Budget MCP aliases loaded!"
