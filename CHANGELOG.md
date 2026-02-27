@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.12.0](https://github.com/morliont/actual-mcp/compare/v1.11.0...v1.12.0) (2026-02-27)
+
+
+### Features
+
+* fixes applied for version 26.2 ([#105](https://github.com/morliont/actual-mcp/issues/105)) ([de2c184](https://github.com/morliont/actual-mcp/commit/de2c1841daacaf85c26dad16cdbd424fba2413cb))
+
+
+### Bug Fixes
+
+* **deps:** update dependency zod-to-json-schema to v3.25.1 ([#90](https://github.com/morliont/actual-mcp/issues/90)) ([676a379](https://github.com/morliont/actual-mcp/commit/676a379e93a0da23a9b9a9f752bfba34a4f1f2ea))
+
 ## [1.7.0](https://github.com/s-stefanov/actual-mcp/compare/v1.6.0...v1.7.0) (2026-01-17)
 
 
