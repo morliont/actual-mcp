@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.1](https://github.com/morliont/actual-mcp/compare/v1.12.0...v1.12.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* override qs to ^6.14.2 to resolve CVE-2026-2391 ([52c7098](https://github.com/morliont/actual-mcp/commit/52c70981a5cad034e60d9fe0737c338e36b9d7ea))
+* update @modelcontextprotocol/sdk to 1.27.1 to resolve cross-client data leak ([f3ae01e](https://github.com/morliont/actual-mcp/commit/f3ae01eecaba442fb11f11a36aa01b7030cf78bd))
+
 ## [1.7.0](https://github.com/s-stefanov/actual-mcp/compare/v1.6.0...v1.7.0) (2026-01-17)
 
 
